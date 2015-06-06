@@ -1,14 +1,15 @@
-#!/usr/local/bin/python3.4
+#!/usr/bin/python
 
 import xml.etree.ElementTree as ET
 import csv
 import sys
+import os
 
-def writeCSV(fileIn, fileOut):
+def writeCSV(fileName):
 	NS = 'http://www.tei-c.org/ns/1.0'
-	with open(fileOut, 'w') as f:
+	with open(fileName + '.csv', 'w') as f:
 		writer = csv.writer(f)
-		tree = ET.parse(fileIn)
+		tree = ET.parse(fileName + '.xml')
 		root = tree.getroot()
 		for row in root.iterfind('.//{%s}row' % NS ):
 			data = []
@@ -16,6 +17,5 @@ def writeCSV(fileIn, fileOut):
 				data.append(cell.text)
 			writer.writerow(data)
 
-fileIn = sys.argv[1]
-fileOut = sys.argv[2]
-writeCSV(fileIn, fileOut)
+name = os.path.splitext(sys.argv[1])[0]
+writeCSV(name)
